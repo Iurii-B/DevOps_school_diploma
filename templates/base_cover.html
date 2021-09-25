@@ -50,15 +50,25 @@
       <div>
         <nav class="nav nav-masthead justify-content-center float-md-end">
           <a class="nav-link active" aria-current="page" href="/">Home</a>
-          <a class="nav-link active" aria-current="page" href="/list">Countries list</a>
-          <a class="nav-link active" aria-current="page" href="/update">Request data update</a>
+          <a class="nav-link active" href="/list">Countries list</a>
+          <a class="nav-link active" href="/update">Request data update</a>
         </nav>
       </div>
     </header>
 
     <main class="px-3">
+      <br>
+      <br>
+    </main>
+
+    <main class="px-3">
       {% block main %}{% endblock %}
       {% block table %}{% endblock %}
+    </main>
+
+    <main class="px-3">
+      <br>
+      <br>
     </main>
 
     <footer class="mt-auto text-white-50">
