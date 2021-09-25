@@ -1,0 +1,88 @@
+{% extends 'base_cover.html' %}
+
+{% block style %}
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%
+}
+
+td, th {
+    border: 1px;
+    padding: 8px;
+}
+{% endblock %}
+
+{% block script %}
+let sortDirection = false;
+let countriesData = {{ countries_summary|safe }};
+
+window.onload = function() {
+    loadTableData(countriesData);
+	sortTable()
+};
+
+
+function loadTableData(countriesData) {
+    let tableBody = document.getElementById('countriesData');
+    let dataHtml = '';
+
+    for(let country of countriesData) {
+        dataHtml += `<tr><td>${country[0]}</td><td>${country[1]}</td><td>${country[2]}</td><td>${country[3]}</td><td>${country[4]}</td><td>${country[5]}</td></tr>`;
+    }
+    tableBody.innerHTML = dataHtml;
+}
+
+function sortTable() {
+  var table, rows, switching, i, x, y, shouldSwitch;
+  table = document.getElementById('countriesData');
+  switching = true;
+  /*Make a loop that will continue until
+  no switching has been done:*/
+  while (switching) {
+    //start by saying: no switching is done:
+    switching = false;
+    rows = table.rows;
+    /*Loop through all table rows (except the
+    first, which contains table headers):*/
+    for (i = 0; i < (rows.length - 1); i++) {
+      //start by saying there should be no switching:
+      shouldSwitch = false;
+      /*Get the two elements you want to compare,
+      one from current row and one from the next:*/
+      x = rows[i].getElementsByTagName("TD")[2];
+      y = rows[i + 1].getElementsByTagName("TD")[2];
+      //check if the two rows should switch place:
+      if (Number(x.innerHTML) > Number(y.innerHTML)) {
+        //if so, mark as a switch and break the loop:
+        shouldSwitch = true;
+        break;
+      }
+    }
+    if (shouldSwitch) {
+      /*If a switch has been marked, make the switch
+      and mark that a switch has been done:*/
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+    }
+  }
+}
+{% endblock %}
+
+
+
+{% block table %}
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Country</th>
+                <th>Deaths</th>
+                <th>Confirmed</th>
+                <th>Stringency Actual</th>
+                <th>Stringency</th>
+            </tr>
+        </thead>
+        <tbody id="countriesData"></tbody>
+    </table>
+{% endblock %}
