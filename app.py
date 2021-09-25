@@ -80,9 +80,19 @@ def index():
 
 @app.route('/country/<country_id>')
 def country_detail(country_id):
-    for i in session.query(Covid1).filter(Covid1.country == str(country_id).upper(), Covid1.date == end_date):
-        country_deaths = i.deaths
-    return render_template('country_detail.html', country_deaths=country_deaths, country=str(country_id).upper())
+    country_detail_read_db = []
+    list1 = []
+    var_latest_date = func_check_latest_record(Covid1) - timedelta(days=1)
+    for i in session.query(Covid1).filter(Covid1.country == str(country_id).upper()).order_by(Covid1.deaths):
+        list1 = [str(i.date),
+                 i.country,
+                 i.confirmed,
+                 i.deaths,
+                 i.stringency_actual,
+                 i.stringency
+                 ]
+        country_detail_read_db.append(list1)
+    return render_template('country_detail.html', country_detail_read_db=country_detail_read_db)
 
 
 @app.route('/list')
@@ -95,7 +105,7 @@ def countries_list():
     countries_summary_read_db = []
     list1 = []
     var_latest_date = func_check_latest_record(Covid1) - timedelta(days=1)
-    for i in session.query(Covid1).filter(Covid1.date == end_date).order_by(Covid1.deaths):
+    for i in session.query(Covid1).filter(Covid1.date == var_latest_date).order_by(Covid1.deaths):
         list1 = [str(i.date),
                  i.country,
                  i.confirmed,
@@ -114,14 +124,6 @@ def countries_list():
 def data_update():
     # UPDATE DB
     #return render_template('index.html')
-
-
-
-@app.route('/tmp1')
-def data_update():
-    # read DB
-    smth_tmp1 = Covid.query.all()
-    return render_template('tmp1.html', smth_tmp1=smth_tmp1)
 '''
 
 if __name__ == "__main__":
