@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 url_no_date = 'https://covidtrackerapi.bsg.ox.ac.uk/api/v2/stringency/date-range/'
 start_2021_date = date(year=2021, month=1, day=1)
-end_date = date.today() - timedelta(days=250)
+end_date = date.today() - timedelta(days=95)
 
 db_string = "postgresql://db_admin:" + keyring.get_password("keyring_creds_01", "db_admin") + "@localhost/postgres"
 db = create_engine(db_string)
@@ -61,16 +61,21 @@ def func_check_latest_record(table_name):
     return i   # "i" will be the first date for which there is NO record
 
 
-var_date = func_check_latest_record(Covid1)  # start_2021_date # date(year=2021, month=3, day=25)
-# Usually "end_date" is set to Yesterday; see beginning of the code
-while var_date <= end_date:  # date(year=2021, month=3, day=26):
-    # API can't provide data for more than 3 or 4 months so we will make separate API calls for every day
-    url_with_date = url_no_date + str(var_date) + '/' + str(var_date)
-    response = urlopen(url_with_date)
-    json_data = loads(response.read())
-    # Call function to insert into DB parsed data that was obtained via API
-    func_insert_db(func_parse_json(json_data, var_date))
-    var_date = var_date + timedelta(days=1)
+def func_populate_or_update_db(var_date, end_date):
+    # Usually "end_date" is set to Yesterday; see beginning of the code
+    while var_date <= end_date:
+        # API can't provide data for more than 3 or 4 months so we will make separate API calls for every day
+        url_with_date = url_no_date + str(var_date) + '/' + str(var_date)
+        response = urlopen(url_with_date)
+        json_data = loads(response.read())
+        # Call function to insert into DB parsed data that was obtained via API
+        func_insert_db(func_parse_json(json_data, var_date))
+        var_date = var_date + timedelta(days=1)
+    return None
+
+
+func_populate_or_update_db(func_check_latest_record(Covid1), end_date)
+
 
 @app.route('/')
 @app.route('/home')
@@ -119,12 +124,12 @@ def countries_list():
 
 
 
-'''
 @app.route('/update')
 def data_update():
-    # UPDATE DB
-    #return render_template('index.html')
-'''
+    # Update DB while staying on the same page
+    func_populate_or_update_db(func_check_latest_record(Covid1), end_date)
+    return redirect(request.referrer)
+
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
