@@ -38,11 +38,11 @@ session = Session()
 base.metadata.create_all(db)
 
 
-def func_insert_db(countries_summary):
+def func_insert_db(countries_summary_get_json):
     # Function to insert records into database
     # "countries_summary" is a list of lists, containing statistics for 1 country for 1 date; example:
     # [['2021-01-01', 'ABW', 5509, 49, 35.19, 35.19], ['2021-01-01', 'AFG', 52513, 2201, 12.04, 12.04]]
-    for j in countries_summary:
+    for j in countries_summary_get_json:
         x = Covid1(date=j[0], country=j[1], confirmed=j[2], deaths=j[3], stringency_actual=j[4], stringency=j[5])
         session.add(x)
         session.commit()
@@ -84,11 +84,29 @@ def country_detail(country_id):
         country_deaths = i.deaths
     return render_template('country_detail.html', country_deaths=country_deaths, country=str(country_id).upper())
 
-'''
+
 @app.route('/list')
 def countries_list():
-    return render_template('countries_list.html', countries_summary=countries_summary)
-'''
+    # On this page we display statistics for all countries for the latest available date
+    # "countries_summary_read_db" is a list of lists, containing statistics for 1 country for 1 date; example:
+    # [['2021-01-01', 'ABW', 5509, 49, 35.19, 35.19], ['2021-01-01', 'AFG', 52513, 2201, 12.04, 12.04]]
+    # The difference from "countries_summary_get_json" is that in "countries_summary_read_db" this list is being
+    # extracted from DB, not pulled via API from the Internet
+    countries_summary_read_db = []
+    list1 = []
+    var_latest_date = func_check_latest_record(Covid1) - timedelta(days=1)
+    for i in session.query(Covid1).filter(Covid1.date == end_date).order_by(Covid1.deaths):
+        list1 = [str(i.date),
+                 i.country,
+                 i.confirmed,
+                 i.deaths,
+                 i.stringency_actual,
+                 i.stringency
+                 ]
+        countries_summary_read_db.append(list1)
+
+    return render_template('countries_list.html', countries_summary_read_db=countries_summary_read_db)
+
 
 
 '''
