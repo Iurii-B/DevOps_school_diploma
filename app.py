@@ -132,4 +132,4 @@ def data_update():
 
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(ssl_context=('cert.pem', 'key.pem'))
