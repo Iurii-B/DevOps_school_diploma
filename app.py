@@ -15,7 +15,7 @@ start_2021_date = date(year=2021, month=1, day=1)
 end_date = date.today() - timedelta(days=95)
 
 
-db = create_engine("postgresql://db_admin:" + keyring.get_password("keyring_creds_01", "db_admin") + "@localhost/postgres")
+db = create_engine("postgresql://db_admin:"+keyring.get_password("keyring_creds_01", "db_admin")+"@localhost/postgres")
 base = declarative_base()
 
 
