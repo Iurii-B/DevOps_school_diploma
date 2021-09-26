@@ -12,10 +12,10 @@ app = Flask(__name__)
 
 url_no_date = 'https://covidtrackerapi.bsg.ox.ac.uk/api/v2/stringency/date-range/'
 start_2021_date = date(year=2021, month=1, day=1)
-end_date = date.today() - timedelta(days=95)
+end_date = date.today() - timedelta(days=88)
 
 
-db = create_engine("postgresql://db_admin:"+keyring.get_password("keyring_creds_01", "db_admin")+"@localhost/postgres")
+engine = create_engine("postgresql://db_admin:"+keyring.get_password("keyring_creds_01", "db_admin")+"@localhost/postgres")
 # Connecting to the database "postgres"; if it does not exist, it would be created
 
 
@@ -37,9 +37,9 @@ class Covid1(Base):
     stringency = Column(String)
 
 
-Base.metadata.create_all(db)  # Creating table in the database
+Base.metadata.create_all(engine)  # Creating table in the database
 
-Session = sessionmaker(db)
+Session = sessionmaker(engine)
 session = Session()
 
 
@@ -124,7 +124,6 @@ def countries_list():
                  i.stringency
                  ]
         countries_summary_read_db.append(list1)
-
     return render_template('countries_list.html', countries_summary_read_db=countries_summary_read_db)
 
 

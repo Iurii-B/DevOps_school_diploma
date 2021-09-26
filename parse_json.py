@@ -4,6 +4,16 @@ def func_parse_json(json_data, var_date):
     list1 = []
     countries_summary_get_json = []
     for var_country in json_data['data'][str(var_date)]:
+        if str(json_data['data'][str(var_date)][var_country]['confirmed']) == 'None':
+            var_confirmed = 0
+        else:
+            var_confirmed = json_data['data'][str(var_date)][var_country]['confirmed']
+
+        if str(json_data['data'][str(var_date)][var_country]['deaths']) == 'None':
+            var_deaths = 0
+        else:
+            var_deaths = json_data['data'][str(var_date)][var_country]['deaths']
+
         if str(json_data['data'][str(var_date)][var_country]['stringency_actual']) == 'None':
             var_stringency_actual = 'Not provided'
         else:
@@ -15,8 +25,8 @@ def func_parse_json(json_data, var_date):
             var_stringency = json_data['data'][str(var_date)][var_country]['stringency']
         list1 = [str(var_date),
                  var_country,
-                 json_data['data'][str(var_date)][var_country]['confirmed'],
-                 json_data['data'][str(var_date)][var_country]['deaths'],
+                 var_confirmed,
+                 var_deaths,
                  var_stringency_actual,
                  var_stringency
                  ]
