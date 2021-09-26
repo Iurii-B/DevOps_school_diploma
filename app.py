@@ -16,13 +16,13 @@ end_date = date.today() - timedelta(days=95)
 
 
 db = create_engine("postgresql://db_admin:"+keyring.get_password("keyring_creds_01", "db_admin")+"@localhost/postgres")
-base = declarative_base()
+Base = declarative_base()
 
 
 ID_SEQ = Sequence('id_seq')
 
 
-class Covid1(base):
+class Covid1(Base):
     __tablename__ = 'covid_1'
     id = Column(Integer, ID_SEQ, primary_key=True, server_default=ID_SEQ.next_value())
     date = Column(Date)
@@ -35,7 +35,7 @@ class Covid1(base):
 
 Session = sessionmaker(db)
 session = Session()
-base.metadata.create_all(db)
+Base.metadata.create_all(db)
 
 
 def func_insert_db(countries_summary_get_json):
