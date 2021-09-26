@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, request, redirect
 from sqlalchemy import create_engine, Column, String, Integer, Sequence, Date
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -39,8 +39,9 @@ class Covid1(Base):
 
 Base.metadata.create_all(engine)  # Creating table in the database
 
-Session = sessionmaker(engine)
-session = Session()
+
+Session = sessionmaker(engine)  # Defining a special Session class
+session = Session()  # Creating an object of Session class
 
 
 def func_insert_db(countries_summary_get_json):
