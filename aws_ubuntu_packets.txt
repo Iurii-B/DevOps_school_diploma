@@ -3,6 +3,7 @@ sudo apt install python3-pip
 pip install sqlalchemy
 pip install flask
 pip install keyring
+pip install keyrings.alt
 sudo apt install mariadb-client-core-10.3
 
 wget https://downloads.mariadb.com/MariaDB/mariadb_repo_setup
