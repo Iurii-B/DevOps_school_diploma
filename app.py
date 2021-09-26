@@ -16,7 +16,10 @@ end_date = date.today() - timedelta(days=95)
 
 
 db = create_engine("postgresql://db_admin:"+keyring.get_password("keyring_creds_01", "db_admin")+"@localhost/postgres")
+
+
 Base = declarative_base()
+# Creating a parent class of SQLAlchemy ORM
 
 
 ID_SEQ = Sequence('id_seq')
@@ -33,9 +36,11 @@ class Covid1(Base):
     stringency = Column(String)
 
 
+Base.metadata.create_all(db)
+
 Session = sessionmaker(db)
 session = Session()
-Base.metadata.create_all(db)
+
 
 
 def func_insert_db(countries_summary_get_json):
