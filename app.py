@@ -16,17 +16,18 @@ end_date = date.today() - timedelta(days=95)
 
 
 db = create_engine("postgresql://db_admin:"+keyring.get_password("keyring_creds_01", "db_admin")+"@localhost/postgres")
+# Connecting to the database "postgres"; if it does not exist, it would be created
 
 
 Base = declarative_base()
-# Creating a parent class of SQLAlchemy ORM
+# Creating a declarative base class that stores a catalog of classes and mapped tables in the Declarative system
 
 
-ID_SEQ = Sequence('id_seq')
+ID_SEQ = Sequence('id_seq')  # Special object to generate unique IDs in the database
 
 
 class Covid1(Base):
-    __tablename__ = 'covid_1'
+    __tablename__ = 'covid_1'  # Actual name of the table in the database
     id = Column(Integer, ID_SEQ, primary_key=True, server_default=ID_SEQ.next_value())
     date = Column(Date)
     country = Column(String)
@@ -36,11 +37,10 @@ class Covid1(Base):
     stringency = Column(String)
 
 
-Base.metadata.create_all(db)
+Base.metadata.create_all(db)  # Creating table in the database
 
 Session = sessionmaker(db)
 session = Session()
-
 
 
 def func_insert_db(countries_summary_get_json):
@@ -126,7 +126,6 @@ def countries_list():
         countries_summary_read_db.append(list1)
 
     return render_template('countries_list.html', countries_summary_read_db=countries_summary_read_db)
-
 
 
 @app.route('/update')
