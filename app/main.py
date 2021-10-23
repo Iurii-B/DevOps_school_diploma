@@ -95,10 +95,10 @@ start_2021_date = date(year=2021, month=1, day=1)
 end_date = date.today() - timedelta(days=1)
 
 
-engine = create_engine("postgresql://db_admin:"+keyring.get_password("keyring_creds_01", "db_admin")+"@localhost/postgres")
+#engine = create_engine("postgresql://db_admin:"+keyring.get_password("keyring_creds_01", "db_admin")+"@localhost/postgres")
 # Connecting to the database "postgres"; if it does not exist, it would be created
 #engine = create_engine("mariadb+mariadbconnector://USERNAME:PASSWORD@DB_ADDRESS", pool_pre_ping=True, isolation_level="READ UNCOMMITTED")
-
+engine = create_engine("mariadb+mariadbconnector://db_admin:"+keyring.get_password("keyring_aws_creds_01", "db_admin")+"@"+keyring.get_password("keyring_aws_url_01", "aws_url_1")+"", pool_pre_ping=True, isolation_level="READ UNCOMMITTED")
 
 Base = declarative_base()
 # Creating a declarative base class that stores a catalog of classes and mapped tables in the Declarative system
