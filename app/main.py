@@ -6,7 +6,10 @@ from urllib.request import urlopen
 from datetime import date, timedelta
 from time import strptime
 from json import loads
-import keyring
+import os
+
+
+app = Flask(__name__)
 
 
 def func_parse_json(json_data, var_date):
@@ -64,6 +67,8 @@ def func_insert_db(countries_summary_get_json):
     # [['2021-01-01', 'ABW', 5509, 49, 35.19, 35.19], ['2021-01-01', 'AFG', 52513, 2201, 12.04, 12.04]]
     for j in countries_summary_get_json:
         x = Covid1(date=j[0], country=j[1], confirmed=j[2], deaths=j[3], stringency_actual=j[4], stringency=j[5])
+        print('X from Insert_DB func', x)
+        print('Js values from Isert_DB func', j[0], j[1], j[2], j[3], j[4], j[5])
         session.add(x)
         session.commit()
 
@@ -82,12 +87,11 @@ def func_populate_or_update_db(var_date, end_date):
             var_date = var_date + timedelta(days=1)
             continue
         # Call function to insert into DB parsed data that was obtained via API
+        print('Parse JSON:', func_parse_json(json_data, var_date))
         func_insert_db(func_parse_json(json_data, var_date))
         var_date = var_date + timedelta(days=1)
     return None
 
-
-app = Flask(__name__)
 
 
 url_no_date = 'https://covidtrackerapi.bsg.ox.ac.uk/api/v2/stringency/date-range/'
@@ -98,7 +102,9 @@ end_date = date.today() - timedelta(days=1)
 #engine = create_engine("postgresql://db_admin:"+keyring.get_password("keyring_creds_01", "db_admin")+"@localhost/postgres")
 # Connecting to the database "postgres"; if it does not exist, it would be created
 #engine = create_engine("mariadb+mariadbconnector://USERNAME:PASSWORD@DB_ADDRESS", pool_pre_ping=True, isolation_level="READ UNCOMMITTED")
-engine = create_engine("mariadb+mariadbconnector://db_admin:"+keyring.get_password("keyring_aws_creds_01", "db_admin")+"@"+keyring.get_password("keyring_aws_url_01", "aws_url_1")+"", pool_pre_ping=True, isolation_level="READ UNCOMMITTED")
+#engine = create_engine("mariadb+mariadbconnector://"+os.environ.get('DB_ADMIN_USERNAME')+":"+os.environ.get('DB_ADMIN_PASSWORD')+"@"+os.environ.get('DB_URL')+"", pool_pre_ping=True, isolation_level="READ UNCOMMITTED")
+engine = create_engine("postgresql://" + os.environ.get('DB_ADMIN_USERNAME') + ":"+os.environ.get('DB_ADMIN_PASSWORD')+"@"+os.environ.get('DB_URL_POSTGRES')+"")
+
 
 Base = declarative_base()
 # Creating a declarative base class that stores a catalog of classes and mapped tables in the Declarative system
@@ -126,6 +132,8 @@ session = Session()  # Creating an object of Session class
 
 
 func_populate_or_update_db(func_sql_to_python_date(session.query(func.max(Covid1.date)).first()) + timedelta(days=1), end_date)
+session.close()
+engine.dispose()
 # We check the latest available record in DB (MAX.date) and start populating DB from the next day
 
 
@@ -147,7 +155,7 @@ def country_detail(country_id):
                  i.stringency
                  ]
         country_detail_read_db.append(list1)
-        #session.close()
+        session.close()
         engine.dispose()
     return render_template('country_detail.html', country_detail_read_db=country_detail_read_db)
 
@@ -165,7 +173,7 @@ def countries_list():
                  i.stringency
                  ]
         countries_summary_read_db.append(list1)
-        #session.close()
+        session.close()
         engine.dispose()
     return render_template('countries_list.html', countries_summary_read_db=countries_summary_read_db)
 
@@ -173,9 +181,15 @@ def countries_list():
 @app.route('/update')
 def data_update():
     # Update DB while staying on the same page
+    print('Today date is', date.today())
+    print('Table last date', session.query(func.max(Covid1.date)).first())
+    print('Message before Update')
     func_populate_or_update_db(func_sql_to_python_date(session.query(func.max(Covid1.date)).first()) + timedelta(days=1), end_date)
+    print('Update done')
+    session.close()
+    engine.dispose()
     return redirect(request.referrer)
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0", debug=True)
