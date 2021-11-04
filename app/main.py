@@ -67,8 +67,6 @@ def func_insert_db(countries_summary_get_json):
     # [['2021-01-01', 'ABW', 5509, 49, 35.19, 35.19], ['2021-01-01', 'AFG', 52513, 2201, 12.04, 12.04]]
     for j in countries_summary_get_json:
         x = Covid1(date=j[0], country=j[1], confirmed=j[2], deaths=j[3], stringency_actual=j[4], stringency=j[5])
-        print('X from Insert_DB func', x)
-        print('Js values from Isert_DB func', j[0], j[1], j[2], j[3], j[4], j[5])
         session.add(x)
         session.commit()
 
@@ -87,7 +85,6 @@ def func_populate_or_update_db(var_date, end_date):
             var_date = var_date + timedelta(days=1)
             continue
         # Call function to insert into DB parsed data that was obtained via API
-        print('Parse JSON:', func_parse_json(json_data, var_date))
         func_insert_db(func_parse_json(json_data, var_date))
         var_date = var_date + timedelta(days=1)
     return None
@@ -181,11 +178,7 @@ def countries_list():
 @app.route('/update')
 def data_update():
     # Update DB while staying on the same page
-    print('Today date is', date.today())
-    print('Table last date', session.query(func.max(Covid1.date)).first())
-    print('Message before Update')
     func_populate_or_update_db(func_sql_to_python_date(session.query(func.max(Covid1.date)).first()) + timedelta(days=1), end_date)
-    print('Update done')
     session.close()
     engine.dispose()
     return redirect(request.referrer)

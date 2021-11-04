@@ -1,0 +1,28 @@
+pip install alembic
+alembic init alembic
+
+alembic revision -m "first alembic revision" # Create initial revision
+alembic upgrade head # Perform empty migration
+
+alembic revision -m "Add a column" # Create revision
+
+	def upgrade():
+	    op.add_column('covid_1', sa.Column('alembic_test_column', sa.String(30)))
+
+	def downgrade():
+	    op.drop_column('covid_1', 'alembic_test_column')
+
+alembic upgrade head # Perform migration
+
+alembic downgrade base # Downgrade to the base (initial) revision
+
+
+alembic revision -m "Add a column2" # Create revision
+
+	def upgrade():
+	    op.add_column('covid_1', sa.Column('alembic_test_column2', sa.String(30)))
+
+	def downgrade():
+	    op.drop_column('covid_1', 'alembic_test_column2')
+
+alembic upgrade head # Perform migration; since we are on the "base" (initial) revision, upgrade to "head" will add both "alembic_test_column" and "alembic_test_column2"
