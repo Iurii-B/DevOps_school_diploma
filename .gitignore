@@ -164,3 +164,6 @@ Loading complete
 /environment_variables
 /alembic.ini
 /alembic/
+/app/uwsgi.ini
+/app/uwsgi_local.ini
+.idea
