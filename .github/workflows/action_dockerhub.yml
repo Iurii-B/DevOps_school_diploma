@@ -42,7 +42,7 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/devops_school:latest
-          build-args: VAR1=${{ env.DB_ADMIN_USERNAME }}, VAR2=${{ env.DB_ADMIN_PASSWORD }}, VAR3=${{ env.DB_URL_POSTGRES }}
+          build-args: VAR1=${{ env.DB_ADMIN_USERNAME }}
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
