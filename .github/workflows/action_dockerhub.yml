@@ -41,7 +41,7 @@ jobs:
           context: ./
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/test1:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/devops_school:latest
           build-arg: VAR1=${{secrets.DB_ADMIN_USERNAME}}, VAR2=${{secrets.DB_ADMIN_PASSWORD}}, VAR3=${{secrets.DB_URL_POSTGRES}}
 
       - name: Image digest
