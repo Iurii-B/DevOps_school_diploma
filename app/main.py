@@ -49,7 +49,7 @@ def func_parse_json(json_data, var_date):
 
 
 def func_sql_to_python_date(sql_row_date):
-    # Covert data formats because when quering DB with command "session.query(func.max(Covid1.date)).first())", the date
+    # Covert data formats because when querying DB with command "session.query(func.max(Covid1.date)).first())", the date
     # is returned inf "(datetime.date(2021, 10, 21),)" format of class "<class 'sqlalchemy.engine.row.Row'>"
     python_date = start_2021_date
     try:
@@ -90,13 +90,12 @@ def func_populate_or_update_db(var_date, end_date):
     return None
 
 
-
 url_no_date = 'https://covidtrackerapi.bsg.ox.ac.uk/api/v2/stringency/date-range/'
 start_2021_date = date(year=2021, month=1, day=1)
 end_date = date.today() - timedelta(days=1)
 
 
-#engine = create_engine("mariadb+mariadbconnector://"+os.environ.get('DB_ADMIN_USERNAME')+":"+os.environ.get('DB_ADMIN_PASSWORD')+"@"+os.environ.get('DB_URL')+"", pool_pre_ping=True, isolation_level="READ UNCOMMITTED")
+# engine = create_engine("mariadb+mariadbconnector://"+os.environ.get('DB_ADMIN_USERNAME')+":"+os.environ.get('DB_ADMIN_PASSWORD')+"@"+os.environ.get('DB_URL')+"", pool_pre_ping=True, isolation_level="READ UNCOMMITTED")
 engine = create_engine("postgresql://" + os.environ.get('DB_ADMIN_USERNAME') + ":"+os.environ.get('DB_ADMIN_PASSWORD')+"@"+os.environ.get('DB_URL_POSTGRES')+"")
 # Connecting to the database "postgres"; if it does not exist, it would be created
 
