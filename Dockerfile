@@ -8,4 +8,4 @@ COPY ./app/templates /app/templates/
 COPY ./requirements.txt /app/
 RUN pip install -r /app/requirements.txt && chmod +x /app/script.sh
 WORKDIR /app/
-CMD ["uwsgi", "--ini", "uwsgi_local.ini"]
+CMD ["uwsgi", "--ini", "uwsgi.ini"]
