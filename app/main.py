@@ -95,8 +95,8 @@ start_2021_date = date(year=2021, month=1, day=1)
 end_date = date.today() - timedelta(days=1)
 
 
-# engine = create_engine("mariadb+mariadbconnector://"+os.environ.get('DB_ADMIN_USERNAME')+":"+os.environ.get('DB_ADMIN_PASSWORD')+"@"+os.environ.get('DB_URL')+"", pool_pre_ping=True, isolation_level="READ UNCOMMITTED")
-engine = create_engine("postgresql://" + os.environ.get('DB_ADMIN_USERNAME') + ":"+os.environ.get('DB_ADMIN_PASSWORD')+"@"+os.environ.get('DB_URL_POSTGRES')+"")
+engine = create_engine("mariadb+mariadbconnector://"+os.environ.get('DB_ADMIN_USERNAME')+":"+os.environ.get('DB_ADMIN_PASSWORD')+"@"+os.environ.get('DB_URL')+"", pool_pre_ping=True, isolation_level="READ UNCOMMITTED")
+# engine = create_engine("postgresql://" + os.environ.get('DB_ADMIN_USERNAME') + ":"+os.environ.get('DB_ADMIN_PASSWORD')+"@"+os.environ.get('DB_URL_POSTGRES')+"")
 # Connecting to the database "postgres"; if it does not exist, it would be created
 
 
