@@ -66,3 +66,10 @@ jobs:
             VAR1=${{ secrets.DB_ADMIN_USERNAME }}
             VAR2=${{ secrets.DB_ADMIN_PASSWORD }}
             VAR3=${{ secrets.DB_URL }}
+      
+      - name: Deploy to Kubernetes cluster                                                                            
+        uses: kodermax/kubectl-aws-eks@master                                                                         
+        env:                                                                                                          
+          RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.date.outputs.date }}
+        with:                                                                                                         
+          args: set image deployment/my-pod app=${{ env.RELEASE_IMAGE }} --record -n $KUBE_NAMESPACE   
