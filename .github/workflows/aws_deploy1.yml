@@ -13,7 +13,7 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_REGION: ${{ secrets.AWS_REGION }}
   KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-  KUBE_NAMESPACE: production
+  KUBE_NAMESPACE: default
   ECR_REPOSITORY: container_repo1
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -72,4 +72,4 @@ jobs:
         env:                                                                                                          
           RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.date.outputs.date }}
         with:                                                                                                         
-          args: set image deployment/my-pod app=${{ env.RELEASE_IMAGE }} --record -n $KUBE_NAMESPACE   
+          args: set image deployment/nginx1-deploy nginxcontainer=${{ env.RELEASE_IMAGE }} --record -n $KUBE_NAMESPACE   
