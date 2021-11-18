@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 env:
-  RELEASE_REVISION: "pr-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}"
+  RELEASE_REVISION: "${GITHUB_REF#refs/heads/}.${GITHUB_SHA::6}"
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_REGION: ${{ secrets.AWS_REGION }}
