@@ -57,7 +57,7 @@ jobs:
           context: ./
           file: ./Dockerfile
           push: true
-          tags: ${{ env.RELEASE_IMAGE }}
+          tags: latest
           build-args: |
             VAR1=${{ secrets.DB_ADMIN_USERNAME }}
             VAR2=${{ secrets.DB_ADMIN_PASSWORD }}
