@@ -13,7 +13,7 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_REGION: ${{ secrets.AWS_REGION }}
   KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-  KUBE_NAMESPACE: default
+  KUBE_NAMESPACE: prod
   ECR_REPOSITORY: container_repo1
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -35,7 +35,7 @@ jobs:
         
       - name: Get current date
         id: date
-        run: echo "::set-output name=date::$(date +'%H-%M-%S')"
+        run: echo "::set-output name=date::$(date +'%d-%b-%H-%M-%S')"
       
       - name: Configure AWS credentials                          
         uses: aws-actions/configure-aws-credentials@v1           
@@ -56,7 +56,7 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         env:                                                                                                          
-          RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.date.outputs.date }}
+          RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:init
         with:
           context: ./
           file: ./Dockerfile
@@ -70,6 +70,6 @@ jobs:
       - name: Deploy to Kubernetes cluster                                                                            
         uses: kodermax/kubectl-aws-eks@master                                                                         
         env:                                                                                                          
-          RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.date.outputs.date }}
+          RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:init
         with:                                                                                                         
-          args: set image deployment/nginx1-deploy nginxcontainer=${{ env.RELEASE_IMAGE }} --record -n $KUBE_NAMESPACE   
+          args: set image deployment/flask1-deploy flaskcontainer=${{ env.RELEASE_IMAGE }} --record -n $KUBE_NAMESPACE   
