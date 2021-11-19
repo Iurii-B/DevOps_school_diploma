@@ -72,4 +72,4 @@ jobs:
         env:                                                                                                          
           RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.date.outputs.date }}
         with:                                                                                                         
-          args: set image deployment/flask1-deploy flaskcontainer=nginx -n $KUBE_NAMESPACE   
+          args: set image deployment/flask1-deploy flaskcontainer=${{ env.RELEASE_IMAGE }} -n $KUBE_NAMESPACE   
