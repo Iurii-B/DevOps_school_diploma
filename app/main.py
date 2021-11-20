@@ -8,6 +8,7 @@ from time import strptime
 from json import loads
 import os
 
+print(P)
 
 app = Flask(__name__)
 
