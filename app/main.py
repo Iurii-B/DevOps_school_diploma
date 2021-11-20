@@ -13,7 +13,7 @@ print(P)
 app = Flask(__name__)
 
 
-def func_parse_json(json_data, var_date):
+#def func_parse_json(json_data, var_date):
     # Function takes as input data received via API for all countries for 1 date, parses and puts it into a list
     # API can't provide data for more than 3 or 4 months so we will make separate API calls for every date
     list1 = []
@@ -49,7 +49,7 @@ def func_parse_json(json_data, var_date):
     return countries_summary_get_json
 
 
-def func_sql_to_python_date(sql_row_date):
+#def func_sql_to_python_date(sql_row_date):
     # Covert data formats because when querying DB with command "session.query(func.max(Covid1.date)).first())", the date
     # is returned inf "(datetime.date(2021, 10, 21),)" format of class "<class 'sqlalchemy.engine.row.Row'>"
     python_date = start_2021_date
@@ -62,7 +62,7 @@ def func_sql_to_python_date(sql_row_date):
     return python_date
 
 
-def func_insert_db(countries_summary_get_json):
+#def func_insert_db(countries_summary_get_json):
     # Function to insert records into database
     # "countries_summary" is a list of lists, each containing statistics for 1 country for 1 date; example:
     # [['2021-01-01', 'ABW', 5509, 49, 35.19, 35.19], ['2021-01-01', 'AFG', 52513, 2201, 12.04, 12.04]]
