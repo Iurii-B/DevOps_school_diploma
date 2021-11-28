@@ -8,12 +8,12 @@ COPY ./app/static /app/static/
 COPY ./app/templates /app/templates/
 COPY ./requirements.txt /app/
 RUN pip install -r /app/requirements.txt
-ARG VAR1
-ARG VAR2
-ARG VAR3
-ENV DB_ADMIN_USERNAME=$VAR1
-ENV DB_ADMIN_PASSWORD=$VAR2
-ENV DB_URL=$VAR3
+#ARG VAR1
+#ARG VAR2
+#ARG VAR3
+#ENV DB_ADMIN_USERNAME=$VAR1
+#ENV DB_ADMIN_PASSWORD=$VAR2
+#ENV DB_URL=$VAR3
 WORKDIR /app/
 CMD ["uwsgi", "--ini", "uwsgi.ini"]
 
