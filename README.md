@@ -23,3 +23,5 @@ The only component created manually prior to all other steps is AWS ECR.
 
 After running ```terraform apply``` the whole infrastructure is created and the initial version of the application (**:init** tag) is deployed.
 Please be patient and give some time to provision all components and populate the database.
+
+After infrastructure is deployed, set KUBE_CONFIG_DATA secret in GitHub to grant access to Kubernetes cluster. Run ```cat $HOME/.kube/config | base64``` to get it.
