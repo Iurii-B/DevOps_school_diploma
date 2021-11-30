@@ -6,7 +6,7 @@ It gets Covid19 world-wide statistics via API (https://covidtracker.bsg.ox.ac.uk
 CI/CD pipeline and IaC approach are implemented. 
 
 Tools/components used:
- * application - Python + Flask + SQLAlchemy
+ * application - Python + Flask + SQLAlchemy + JavaScript + HTML + Bootstrap
  * compute - AWS/EC2 instances as Kubernetes worker nodes
  * containers - Docker
  * orchestration - AWS/EKS Kubernetes
