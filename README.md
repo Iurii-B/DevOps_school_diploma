@@ -1,7 +1,7 @@
 ## Diploma project for EPAM DevOps Internship #20
 
 A light-weight Python/Flask application with MariaDB database.
-It requests Covid19 world-wide statistics via API (https://covidtracker.bsg.ox.ac.uk/about-api), stores it in the database and presents to the user.
+It gets Covid19 world-wide statistics via API (https://covidtracker.bsg.ox.ac.uk/about-api), stores it in the database and displays on the web page.
 
 CI/CD pipeline and IaC approach are implemented. 
 
