@@ -50,7 +50,9 @@ jobs:
       
       - name: Check if
         if: contains(${{ steps.deploy_status.outputs.result }}, 'flask1-deploy') == 'true'
-        run: echo "Deployment exists"
+        run: |
+          echo "Deployment exists"
+          echo ${{ steps.deploy_status.outputs.result }}
     
       #- name: Rollout new deployment to Kubernetes cluster                                                                            
       #  uses: Consensys/kubernetes-action@master
