@@ -39,7 +39,7 @@ jobs:
         id: deploy_status
         uses: Consensys/kubernetes-action@master
         with:                                                                                                         
-          args: get deploy -n ${{ env.KUBE_NAMESPACE }}
+          args: get deploy -A
     
       - name: Print deployment status and ENV
         env:
