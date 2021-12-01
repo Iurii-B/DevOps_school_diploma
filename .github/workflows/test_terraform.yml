@@ -46,4 +46,4 @@ jobs:
         uses: kodermax/kubectl-aws-eks@master                                                                         
         
         with:                                                                                                         
-          args: set image deployment/flask1-deploy flaskcontainer=nginx -n $KUBE_NAMESPACE   
+          args: create deployment flaskapp1 image=nginx -n $KUBE_NAMESPACE   
