@@ -47,7 +47,7 @@ jobs:
         with:                                                                                                         
           args: rollout status deploy flask1-deploy -n prod
     
-      - name: Print image
+      - name: Print deployment status
         run: 
           echo ${{ steps.deploy_status.outputs.result }}
     
