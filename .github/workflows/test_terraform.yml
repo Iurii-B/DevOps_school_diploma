@@ -55,9 +55,12 @@ jobs:
           
       - name: If false
         if: contains( env.DEPLOY_STATUS, 'flask1-deploy') != 'true'
-        run: |
-          echo "Deployment doesn't exist"
-          echo ${{ steps.deploy_status.outputs.result }}
+        uses: kodermax/kubectl-aws-eks@master
+        with:
+          args: apply k8s_deploy.yaml
+        #run: |
+        #  echo "Deployment doesn't exist"
+        #  echo ${{ steps.deploy_status.outputs.result }}
     
       #- name: Rollout new deployment to Kubernetes cluster                                                                            
       #  uses: Consensys/kubernetes-action@master
