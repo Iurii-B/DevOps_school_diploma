@@ -45,8 +45,7 @@ jobs:
         env:
           DEPLOY_STATUS: ${{ steps.deploy_status.outputs.result }}
         run: |
-          printenv
-          echo  ${{ steps.deploy_status.outputs.result }}
+          echo  $DEPLOY_STATUS
       
       - name: If true
         if: contains( env.DEPLOY_STATUS, 'flask1-deploy') == 'true'
