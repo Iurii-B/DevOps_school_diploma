@@ -17,7 +17,7 @@ spec:
         app: flaskapp1
     spec:
       containers:
-      - image: nginx
+      - image: ${{ env.RELEASE_IMAGE }}
         name: flaskcontainer
         ports:
         - containerPort: 5000
