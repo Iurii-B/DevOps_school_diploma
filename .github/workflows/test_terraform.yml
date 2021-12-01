@@ -45,7 +45,7 @@ jobs:
         id: deploy_status
         uses: Consensys/kubernetes-action@master
         with:                                                                                                         
-          args: rollout status deploy flask1-deploy -n prod
+          args: get deploy -n prod
     
       - name: Print deployment status
         run: 
