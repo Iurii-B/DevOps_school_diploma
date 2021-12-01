@@ -46,6 +46,7 @@ jobs:
           DEPLOY_STATUS: ${{ steps.deploy_status.outputs.result }}
         run: |
           echo  $DEPLOY_STATUS
+          echo Some Test Text >> file1
       
       - name: If true
         if: contains( env.DEPLOY_STATUS, 'flask1-deploy') == 'true'
@@ -55,11 +56,13 @@ jobs:
           
       - name: If false
         if: contains( env.DEPLOY_STATUS, 'flask1-deploy') != 'true'
-        uses: kodermax/kubectl-aws-eks@master
-        env:                                                                                                          
-          RELEASE_IMAGE: httpd
-        with:
-          args: apply -f k8s_deploy.yaml
+        run: |
+          cat file1
+      #  uses: kodermax/kubectl-aws-eks@master
+      #  env:                                                                                                          
+      #    RELEASE_IMAGE: httpd
+      #  with:
+      #    args: apply -f k8s_deploy.yaml
         #run: |
         #  echo "Deployment doesn't exist"
         #  echo ${{ steps.deploy_status.outputs.result }}
