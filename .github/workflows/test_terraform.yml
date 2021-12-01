@@ -43,7 +43,6 @@ jobs:
     
     
       - name: Deploy to Kubernetes cluster                                                                            
-        uses: kodermax/kubectl-aws-eks@master                                                                         
-        
+        uses: Consensys/kubernetes-action@master                                                                         
         with:                                                                                                         
           args: create deployment flaskapp1 image=nginx -n $KUBE_NAMESPACE   
