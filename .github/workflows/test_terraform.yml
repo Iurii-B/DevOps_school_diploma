@@ -44,9 +44,10 @@ jobs:
       - name: Print deployment status and ENV
         env:
           DEPLOY_STATUS: ${{ steps.deploy_status.outputs.result }}
+          ENV333: httpd
         run: |
           echo  $DEPLOY_STATUS
-          printf "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: ${{ env.AWS_REGION }}\n  namespace: prod\n  labels:\n    app: flaskprod\nspec:\n  replicas: 2\n  selector:\n    matchLabels:\n      app: flaskprod\n  template:\n    metadata:\n      name: flasktemplate1\n      labels:\n        app: flaskprod\n    spec:\n      containers:\n      - image: nginx\n        name: flaskcontainer\n        ports:\n        - containerPort: 5000\n" > k8s.yaml
+          printf "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: flaskprod\n  namespace: prod\n  labels:\n    app: flaskprod\nspec:\n  replicas: 2\n  selector:\n    matchLabels:\n      app: flaskprod\n  template:\n    metadata:\n      name: flasktemplate1\n      labels:\n        app: flaskprod\n    spec:\n      containers:\n      - image: ${{ env.ENV333 }}\n        name: flaskcontainer\n        ports:\n        - containerPort: 5000\n" > k8s.yaml
       
       - name: If true
         if: contains( env.DEPLOY_STATUS, 'flask1-deploy') == 'true'
