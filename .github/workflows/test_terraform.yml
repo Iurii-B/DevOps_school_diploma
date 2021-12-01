@@ -47,11 +47,11 @@ jobs:
         with:                                                                                                         
           args: get deploy -n ${{ env.KUBE_NAMESPACE }}
     
-      - name: Print deployment status
+      - name: Print deployment status and ENV
         env:
           DEPLOY_STATUS: ${{ steps.deploy_status.outputs.result }}
         run: 
-          echo ${{ env.DEPLOY_STATUS }}
+          printenv
       
       - name: Check if
         if: contains(${{ steps.deploy_status.outputs.result }}, 'flask1-deploy') == 'true'
