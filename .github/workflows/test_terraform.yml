@@ -49,7 +49,7 @@ jobs:
           echo  ${{ steps.deploy_status.outputs.result }}
       
       - name: Check if
-        if: contains(${{ steps.deploy_status.outputs.result }}, 'flask1-deploy') == 'true'
+        if: contains( env.DEPLOY_STATUS, 'flask1-deploy') == 'true'
         run: |
           echo "Deployment exists"
           echo ${{ steps.deploy_status.outputs.result }}
