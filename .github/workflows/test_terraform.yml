@@ -46,7 +46,7 @@ jobs:
           DEPLOY_STATUS: ${{ steps.deploy_status.outputs.result }}
         run: |
           echo  $DEPLOY_STATUS
-          echo Some Test Text >> file1
+          printf "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: ${{ env.AWS_REGION }}\n  namespace: prod\n  labels:\n    app: flaskprod\nspec:\n  replicas: 2\n  selector:\n    matchLabels:\n      app: flaskprod\n  template:\n    metadata:\n      name: flasktemplate1\n      labels:\n        app: flaskprod\n    spec:\n      containers:\n      - image: nginx\n        name: flaskcontainer\n        ports:\n        - containerPort: 5000\n" > k8s.yaml
       
       - name: If true
         if: contains( env.DEPLOY_STATUS, 'flask1-deploy') == 'true'
@@ -57,7 +57,7 @@ jobs:
       - name: If false
         if: contains( env.DEPLOY_STATUS, 'flask1-deploy') != 'true'
         run: |
-          cat file1
+          cat k8s.yaml
       #  uses: kodermax/kubectl-aws-eks@master
       #  env:                                                                                                          
       #    RELEASE_IMAGE: httpd
