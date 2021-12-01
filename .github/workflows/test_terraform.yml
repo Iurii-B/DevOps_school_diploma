@@ -42,7 +42,8 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
     
     
-      - name: Deploy to Kubernetes cluster                                                                            
-        uses: Consensys/kubernetes-action@master                                                                         
+      - name: Rollout new deployment to Kubernetes cluster                                                                            
+        uses: Consensys/kubernetes-action@master
+        if: contains(rollout status deploy flask1-deploy -n prod, 'NotFound') == 'true'
         with:                                                                                                         
-          args: create deployment flaskapp1 --image=nginx -n ${{ env.KUBE_NAMESPACE }}
+          args: create deployment flaskapp1 --image=nginx -n prod
