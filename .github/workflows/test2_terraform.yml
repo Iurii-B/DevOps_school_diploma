@@ -1,4 +1,5 @@
-name: Create new K8s deployment or update existing one
+name: Test2
+# Create new K8s deployment or update existing one
 # Includes SonarCloud scan
 
 on:
