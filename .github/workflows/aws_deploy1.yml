@@ -76,3 +76,8 @@ jobs:
           RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.date.outputs.date }}
         with:                                                                                                         
           args: set image deployment/flaskprod flaskprod=${{ env.RELEASE_IMAGE }} -n ${{ env.KUBE_NAMESPACE }}
+      
+      - name: Verify Kubernetes deployment                               
+        uses: kodermax/kubectl-aws-eks@master                            
+        with:                                                            
+          args: rollout status deploy flaskprod -n ${{ env.KUBE_NAMESPACE }}
