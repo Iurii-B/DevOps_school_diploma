@@ -14,7 +14,7 @@ app = Flask(__name__)
 
 def func_parse_json(json_data, var_date):
     # Function takes as input data received via API for all countries for 1 date, parses and puts it into a list
-    # API can't provide data for more than 3 or 4 months so we will make separate API calls for every date
+    # API can't provide data for more than 3 or 4 months, so we will make separate API calls for every date
     list1 = []
     countries_summary_get_json = []
     for var_country in json_data['data'][str(var_date)]:
@@ -49,15 +49,12 @@ def func_parse_json(json_data, var_date):
 
 
 def func_sql_to_python_date(sql_row_date):
-    # Covert data formats because when querying DB with command "session.query(func.max(Covid1.date)).first())", the date
-    # is returned inf "(datetime.date(2021, 10, 21),)" format of class "<class 'sqlalchemy.engine.row.Row'>"
+    # Convert data formats because when querying DB with command "session.query(func.max(Covid1.date)).first())",
+    # the date is returned in "(datetime.date(2021, 10, 21),)" format of class "<class 'sqlalchemy.engine.row.Row'>"
     python_date = start_2021_date
-    try:
-        python_date = date(year=strptime(str(sql_row_date)[15:].replace('),)', ''), '%Y, %m, %d').tm_year,
-                           month=strptime(str(sql_row_date)[15:].replace('),)', ''), '%Y, %m, %d').tm_mon,
-                           day=strptime(str(sql_row_date)[15:].replace('),)', ''), '%Y, %m, %d').tm_mday)
-    except:
-        ValueError
+    python_date = date(year=strptime(str(sql_row_date)[15:].replace('),)', ''), '%Y, %m, %d').tm_year,
+                       month=strptime(str(sql_row_date)[15:].replace('),)', ''), '%Y, %m, %d').tm_mon,
+                       day=strptime(str(sql_row_date)[15:].replace('),)', ''), '%Y, %m, %d').tm_mday)
     return python_date
 
 
@@ -74,7 +71,7 @@ def func_insert_db(countries_summary_get_json):
 def func_populate_or_update_db(var_date, end_date):
     # Usually "end_date" is set to Yesterday; see beginning of the code
     while var_date < end_date:
-        # API can't provide data for more than couple of months so we will make separate API calls for every day
+        # API can't provide data for more than a couple of months, so we will make separate API calls for every day
         url_with_date = url_no_date + str(var_date) + '/' + str(var_date)
         try:
             response = urlopen(url_with_date)
@@ -84,7 +81,7 @@ def func_populate_or_update_db(var_date, end_date):
             print(json_data, var_date)
             var_date = var_date + timedelta(days=1)
             continue
-        # Call function to insert into DB parsed data that was obtained via API
+        # Call function "func_insert_db" to insert into DB parsed data that was obtained via API
         func_insert_db(func_parse_json(json_data, var_date))
         var_date = var_date + timedelta(days=1)
     return None
@@ -97,7 +94,8 @@ end_date = date.today() - timedelta(days=1)
 
 engine = create_engine("mariadb+mariadbconnector://"+os.environ.get('DB_ADMIN_USERNAME')+":"+os.environ.get('DB_ADMIN_PASSWORD')+"@"+os.environ.get('DB_URL')+"/database1"+"", pool_pre_ping=True, isolation_level="READ UNCOMMITTED")
 # engine = create_engine("postgresql://" + os.environ.get('DB_ADMIN_USERNAME') + ":"+os.environ.get('DB_ADMIN_PASSWORD')+"@"+os.environ.get('DB_URL_POSTGRES')+"")
-# Connecting to the database "postgres"; if it does not exist, it would be created
+# Connecting to the database "postgres" or "database1"; the database itself should already exist, the app will not
+# create database itself. But the app will create tables in the database if they do not exist.
 
 
 Base = declarative_base()
