@@ -70,28 +70,35 @@ def func_insert_db(countries_summary_get_json):
 
 def func_populate_or_update_db(var_date, end_date):
     # Usually "end_date" is set to Yesterday; see beginning of the code
+    total_year_data = []  # Adjustment for variant without DB
     while var_date < end_date:
         # API can't provide data for more than a couple of months, so we will make separate API calls for every day
         url_with_date = url_no_date + str(var_date) + '/' + str(var_date)
         try:
             response = urlopen(url_with_date)
             json_data = loads(response.read())
+            # "json_data" is a list of statistics for all countries for a single date
+            # [['2021-12-10', 'AGO', 65371, 1737, 66.67, 66.67], ['2021-12-10', 'ALB', 203215, 3130, 45.37, 45.37], ...]
             json_data_data_key = json_data['data']
         except KeyError:
             print(json_data, var_date)
             var_date = var_date + timedelta(days=1)
             continue
         # Call function "func_insert_db" to insert into DB parsed data that was obtained via API
-        func_insert_db(func_parse_json(json_data, var_date))
+        #func_insert_db(func_parse_json(json_data, var_date))
+        # Call function "func_parse_json" to parse data for the date of the current iteration
+        # and append it to a summary list "total_year_data"
+        total_year_data.append(func_parse_json(json_data, var_date))  # For variant without DB
         var_date = var_date + timedelta(days=1)
-    return None
+    #return None
+    return total_year_data  # For variant without DB
 
 
 url_no_date = 'https://covidtrackerapi.bsg.ox.ac.uk/api/v2/stringency/date-range/'
 start_2021_date = date(year=2021, month=1, day=1)
-end_date = date.today() - timedelta(days=1)
+end_date = date.today() - timedelta(days=355)
 
-
+'''
 engine = create_engine("mariadb+mariadbconnector://"+os.environ.get('DB_ADMIN_USERNAME')+":"+os.environ.get('DB_ADMIN_PASSWORD')+"@"+os.environ.get('DB_URL')+"/database1"+"", pool_pre_ping=True, isolation_level="READ UNCOMMITTED")
 # engine = create_engine("postgresql://" + os.environ.get('DB_ADMIN_USERNAME') + ":"+os.environ.get('DB_ADMIN_PASSWORD')+"@"+os.environ.get('DB_URL_POSTGRES')+"")
 # Connecting to the database "postgres" or "database1"; the database itself should already exist, the app will not
@@ -127,6 +134,7 @@ func_populate_or_update_db(func_sql_to_python_date(session.query(func.max(Covid1
 session.close()
 engine.dispose()
 # We check the latest available record in DB (MAX.date) and start populating DB from the next day
+'''
 
 
 @app.route('/')
@@ -134,7 +142,7 @@ engine.dispose()
 def index():
     return render_template('index.html')
 
-
+'''
 @app.route('/country/<country_id>')
 def country_detail(country_id):
     country_detail_read_db = []
@@ -177,6 +185,7 @@ def data_update():
     session.close()
     engine.dispose()
     return redirect(request.referrer)
+'''
 
 
 if __name__ == "__main__":
