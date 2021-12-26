@@ -2,9 +2,10 @@ name: AWS_Deploy_noDB
 # App from "noDB_branch" doesn't use DB and has just a dummy page. No SonarCloud in the pipeline as well
 
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
+  # Triggers the workflow on push or pull request events but only for the "noDB_branch" branch
   push:
-    branches: [ noDB_branch ]
+    branches: 
+      - noDB_branch
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
