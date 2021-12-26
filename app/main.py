@@ -57,7 +57,7 @@ def func_sql_to_python_date(sql_row_date):
                        day=strptime(str(sql_row_date)[15:].replace('),)', ''), '%Y, %m, %d').tm_mday)
     return python_date
 
-
+'''
 def func_insert_db(countries_summary_get_json):
     # Function to insert records into database
     # "countries_summary" is a list of lists, each containing statistics for 1 country for 1 date; example:
@@ -66,7 +66,7 @@ def func_insert_db(countries_summary_get_json):
         x = Covid1(date=j[0], country=j[1], confirmed=j[2], deaths=j[3], stringency_actual=j[4], stringency=j[5])
         session.add(x)
         session.commit()
-
+'''
 
 def func_populate_or_update_db(var_date, end_date):
     # Usually "end_date" is set to Yesterday; see beginning of the code
